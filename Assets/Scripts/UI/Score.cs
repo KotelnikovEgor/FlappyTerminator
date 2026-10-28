@@ -25,4 +25,10 @@ public class Score : MonoBehaviour
         _number++;
         _text.text = _number.ToString();
     }
+
+    public void ResetValue()
+    {
+        _number = 0;
+        _text.text = _number.ToString();
+    }
 }

@@ -12,12 +12,12 @@ public class CollisionDetector : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.TryGetComponent(out Enemy enemy))
+        if (collision.gameObject.TryGetComponent<IInteractable>(out _))
         {
-            _playerDead.Destroy();
+            _playerDead.Die();
 
-            if (enemy.TryGetComponent(out EnemyDead enemyDead))
-                enemyDead.Destroy();
+            if (collision.gameObject.TryGetComponent(out EnemyDead enemyDead))
+                enemyDead.Die();
         }
     }
 }

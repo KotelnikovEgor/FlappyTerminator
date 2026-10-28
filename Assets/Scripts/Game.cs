@@ -1,59 +1,48 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
-    [SerializeField] private PlayerCharacter _character;
-    [SerializeField] private StartGame _startGame;
-    [SerializeField] private EndGame _endGame;
+    [SerializeField] private PlayGameWindow _playGame;
+    [SerializeField] private Player _player;
+    [SerializeField] private EnemySpawner _enemySpawner;
+    [SerializeField] private BulletSpawner _bulletSpawner;
+    [SerializeField] private Score _score;
 
     private void Awake()
     {
         Time.timeScale = 0f;
-        _startGame.Open();
-        _endGame.Close();
+        _playGame.Open();
     }
 
     private void OnEnable()
     {
-        _startGame.PlayButtonClicked += OnPlayButtonClick;
-        _endGame.RestartButtonClicked += OnRestartButtonClick;
-        _character.Destroyed += GameOver;
+        _playGame.PlayButtonClicked += OnPlayButtonClick;
+        _player.Destroyed += GameOver;
     }
 
     private void OnDisable()
     {
-        _startGame.PlayButtonClicked -= OnPlayButtonClick;
-        _endGame.RestartButtonClicked -= OnRestartButtonClick;
-        _character.Destroyed -= GameOver;
+        _playGame.PlayButtonClicked -= OnPlayButtonClick;
+        _player.Destroyed -= GameOver;
     }
 
     private void OnPlayButtonClick()
     {
-        _startGame.Close();
+        _playGame.Close();
         Play();
-    }
-
-    private void OnRestartButtonClick()
-    {
-        _endGame.Close();
-        Restart();
     }
 
     private void Play()
     {
         Time.timeScale = 1f;
-    }
-
-    private void Restart()
-    {
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(currentSceneName);
+        _player.ResetValues();
+        _enemySpawner.ResetObjects();
+        _bulletSpawner.ResetObjects();
+        _score.ResetValue();
     }
 
     private void GameOver()
     {
-        Time.timeScale = 0f;
-        _endGame.Open();
+        _playGame.Open();
     }
 }

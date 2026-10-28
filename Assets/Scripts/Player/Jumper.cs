@@ -5,16 +5,18 @@ public class Jumper : MonoBehaviour
 {
     [SerializeField] private InputReader _inputReader;
 
+    private readonly float _force = 5f;
+    private Vector3 _startPosition;
     private Rigidbody2D _rigidbody;
-    private float _force = 5f;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _startPosition = transform.position;
         _inputReader.JumpPressed += Jump;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         _inputReader.JumpPressed -= Jump;
     }
@@ -22,5 +24,11 @@ public class Jumper : MonoBehaviour
     private void Jump()
     {
         _rigidbody.linearVelocityY = _force;
+    }
+
+    public void ResetValue()
+    {
+        _rigidbody.linearVelocity = Vector2.zero;
+        transform.position = _startPosition;
     }
 }

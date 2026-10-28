@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    private readonly float _horizontalSpeed = -2f;
+    private readonly float _verticalSpeed = 2f;
+    private readonly float _amplitude = 1f;
+    private readonly float _rotationAmplitude = 15f;
+    private readonly float _baseYRotation = 180f;
+
     private float _startYPosition;
-    private float _horizontalSpeed = -2f;
-    private float _verticalSpeed = 2f;
-    private float _amplitude = 1f;
     private float _timeCounter;
-    private float _rotationAmplitude = 15f;
-    private float _baseYRotation = 180f;
 
     public bool IsFalling => Mathf.Cos(_timeCounter) < 0;
 

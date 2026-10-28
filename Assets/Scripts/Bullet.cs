@@ -1,27 +1,16 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+[RequireComponent(typeof(CircleCollider2D), typeof(Rigidbody2D))]
+public class Bullet : MonoBehaviour, ISpawnable
 {
-    private float _speed = 20f;
-    private float _lifeTime = 5f;
-    private WaitForSeconds _lifeInSeconds;
-    private Vector3 _direction;
-    private Coroutine _lifeTimerCoroutine;
+    private readonly float _speed = 20f;
+
+    private CircleCollider2D _collider;
+    private Rigidbody2D _rigidbody;
 
     public event Action<Bullet> EncounteredEnemy;
-
-    private void Awake()
-    {
-        _lifeInSeconds = new(_lifeTime);
-        _lifeTimerCoroutine = StartCoroutine(LifeTimer());
-    }
-
-    private void Update()
-    {
-        transform.Translate(_direction * _speed * Time.deltaTime);
-    }
+    public event Action<Bullet> Destroyed;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -33,24 +22,27 @@ public class Bullet : MonoBehaviour
         if (collision.gameObject.TryGetComponent(out IDamageable damageable))
         {
             damageable.TakeDamage();
-            StopCoroutine(_lifeTimerCoroutine);
-            Destroy(gameObject);
+            Release();
         }
     }
 
-    private IEnumerator LifeTimer()
+    private void OnBecameInvisible()
     {
-        yield return _lifeInSeconds;
+        Release();
+    }
+
+    private void Release()
+    {
+        Destroyed?.Invoke(this);
         Destroy(gameObject);
     }
 
-    public void SetDirection(Vector3 direction)
+    public void Init(Vector3 direction, LayerMask excludeLayer)
     {
-        _direction = direction.normalized;
-    }
+        _collider = GetComponent<CircleCollider2D>();
+        _rigidbody = GetComponent<Rigidbody2D>();
 
-    public void SetLayer(int layerIndex)
-    {
-        gameObject.layer = layerIndex;
+        _collider.excludeLayers = excludeLayer;
+        _rigidbody.linearVelocity = direction.normalized * _speed;
     }
 }

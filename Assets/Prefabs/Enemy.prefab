@@ -235,8 +235,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 116873eff6db7464c9246ad0a320e7ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyShoot
-  _prefab: {fileID: -9100725649469326388, guid: 00440686af5ce5c40a5ece7352c4a909, type: 3}
   _firePoint: {fileID: 7928577209172592363}
+  _layer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &4081673681190436607
 MonoBehaviour:
   m_ObjectHideFlags: 0

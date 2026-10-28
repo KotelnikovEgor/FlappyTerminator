@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class EnemyShoot : MonoBehaviour
 {
-    [SerializeField] private Bullet _prefab;
     [SerializeField] private Transform _firePoint;
+    [SerializeField] private LayerMask _layer;
 
-    private string _bulletLayer = "EnemyBullet";
-    private float _rate = 1.5f;
+    private BulletSpawner _bulletSpawner;
+    private readonly float _rate = 1.5f;
     private WaitForSeconds _rateInSeconds;
 
     private void Start()
@@ -21,9 +21,12 @@ public class EnemyShoot : MonoBehaviour
         while (enabled)
         {
             yield return _rateInSeconds;
-            Bullet bullet = Instantiate(_prefab, _firePoint.position, Quaternion.identity);
-            bullet.SetDirection(-_firePoint.right);
-            bullet.SetLayer(LayerMask.NameToLayer(_bulletLayer));
+            _bulletSpawner.Spawn(_firePoint.position, -_firePoint.right, _layer);
         }
+    }
+
+    public void SetBulletSpawner(BulletSpawner bulletSpawner)
+    {
+        _bulletSpawner = bulletSpawner;
     }
 }

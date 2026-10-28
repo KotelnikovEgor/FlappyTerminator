@@ -7,6 +7,7 @@ public class PlayerDead : MonoBehaviour, IDamageable
 
     private Camera _camera;
     private float _cameraHeight;
+    private bool _isDead = false;
 
     public event Action Dead;
 
@@ -18,19 +19,30 @@ public class PlayerDead : MonoBehaviour, IDamageable
 
     private void Update()
     {
+        if (_isDead) 
+            return;
+
         if (transform.position.y > _cameraHeight || transform.position.y < -_cameraHeight)
-            Destroy();
+            Die();
     }
 
-    public void Destroy()
+    public void Die()
     {
+        if (_isDead)
+            return;
+
+        _isDead = true;
         Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
         Dead?.Invoke();
-        Destroy(gameObject);
     }
 
     public void TakeDamage()
     {
-        Destroy();
+        Die();
+    }
+
+    public void ResetValue()
+    {
+        _isDead = false;
     }
 }

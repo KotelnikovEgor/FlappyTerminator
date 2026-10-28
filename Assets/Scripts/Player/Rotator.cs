@@ -6,11 +6,11 @@ public class Rotator : MonoBehaviour
 {
     [SerializeField] private InputReader _inputReader;
 
+    private readonly float _speed = 2f;
     private Rigidbody2D _rigidbody;
     private Quaternion _minRotation;
     private Quaternion _maxRotation;
     private Coroutine _rotateCoroutine;
-    private float _speed = 2f;
 
     private void Awake()
     {
@@ -46,5 +46,10 @@ public class Rotator : MonoBehaviour
 
         transform.rotation = _minRotation;
         _rotateCoroutine = null;
+    }
+
+    public void ResetValue()
+    {
+        transform.rotation = Quaternion.identity;
     }
 }

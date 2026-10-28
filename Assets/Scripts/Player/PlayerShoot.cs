@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
-    [SerializeField] private Bullet _prefab;
+    [SerializeField] private BulletSpawner _bulletSpawner;
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private Transform _firePoint;
-
-    private string _bulletLayer = "PlayerBullet";
+    [SerializeField] private LayerMask _layer;
 
     public event Action Hited;
 
@@ -23,9 +22,7 @@ public class PlayerShoot : MonoBehaviour
 
     private void Shoot()
     {
-        Bullet bullet = Instantiate(_prefab, _firePoint.position, Quaternion.identity);
-        bullet.SetDirection(_firePoint.right);
-        bullet.SetLayer(LayerMask.NameToLayer(_bulletLayer));
+        Bullet bullet = _bulletSpawner.Spawn(_firePoint.position, _firePoint.right, _layer);
         bullet.EncounteredEnemy += TrackHit;
     }
 
